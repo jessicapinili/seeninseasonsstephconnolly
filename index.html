@@ -1,0 +1,274 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Seen in Seasons Workshop for Steph</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+<style>
+:root{
+  --blush:#F2C6D0; --pink:#F7D6DE; --petal:#FCEEF1; --rose:#E8A3B4;
+  --deep:#8A3A52; --ink:#3D1A24; --cream:#FFF8F9;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+body{
+  font-family:'DM Sans',sans-serif; color:var(--ink); -webkit-font-smoothing:antialiased;
+  background:var(--cream);
+  background-image:
+    radial-gradient(circle at 10% 15%, #FBE1E8 0, transparent 35%),
+    radial-gradient(circle at 90% 30%, #FDEBF0 0, transparent 40%),
+    radial-gradient(circle at 50% 95%, #FBE1E8 0, transparent 40%);
+  min-height:100vh;
+}
+.wrap{max-width:980px;margin:0 auto;padding:72px 22px 90px;text-align:center}
+.eyebrow{
+  display:inline-block;font-size:12px;font-weight:700;letter-spacing:.22em;text-transform:uppercase;
+  color:var(--deep);margin-bottom:22px;animation:jiggle 1.6s ease-in-out infinite;transform-origin:center;
+}
+@keyframes jiggle{0%,55%,100%{transform:rotate(0) scale(1)}60%{transform:rotate(-4deg) scale(1.06)}68%{transform:rotate(4deg) scale(1.06)}76%{transform:rotate(-3deg)}84%{transform:rotate(2deg)}92%{transform:rotate(-1deg)}}
+@media (prefers-reduced-motion:reduce){.eyebrow,.oni{animation:none}}
+h1{font-size:clamp(36px,6vw,68px);font-weight:800;line-height:1.05;letter-spacing:-.02em;color:var(--ink)}
+h1 em{font-style:normal;color:var(--rose)}
+.for{margin-top:14px;font-size:clamp(18px,2.4vw,24px);font-weight:500;color:var(--deep)}
+.for strong{font-weight:800}
+.oni{display:inline-block;font-size:1.6em;vertical-align:-.15em;margin-left:4px;animation:jiggle 1.6s ease-in-out infinite .4s}
+
+.starts{margin-top:36px;font-size:15px;font-weight:500;color:var(--deep)}
+#skip{font-family:inherit;font-size:14px;font-weight:800;color:var(--ink);background:var(--blush);border:none;border-radius:100px;padding:5px 14px;margin:0 3px;cursor:pointer}
+#skip:hover{background:var(--rose);color:#fff}
+.starts + .frame{margin-top:18px}
+/* video frame with fun border */
+.frame{
+  margin:52px auto 0;max-width:900px;padding:14px;border-radius:34px;
+  background:repeating-linear-gradient(45deg,var(--pink) 0 14px,#fff 14px 28px);
+  box-shadow:0 24px 60px rgba(232,163,180,.35);
+  position:relative;
+}
+.frame::before,.frame::after{
+  content:"";position:absolute;width:26px;height:26px;border-radius:50%;
+  background:var(--rose);border:5px solid #fff;
+}
+.frame::before{top:-10px;left:-10px}
+.frame::after{bottom:-10px;right:-10px}
+.player{position:relative;border-radius:22px;overflow:hidden;background:#2a1219;aspect-ratio:16/9;border:3px solid #fff}
+.player iframe{position:absolute;top:0;left:0;width:100%;height:100%;border:0}
+.click-layer{position:absolute;inset:0 0 70px 0;z-index:1;cursor:pointer}
+.placeholder{
+  position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:10px;
+  background:linear-gradient(135deg,#F7D6DE,#FCEEF1);color:var(--deep);font-weight:700;letter-spacing:.15em;
+  text-transform:uppercase;font-size:12px;pointer-events:none;
+}
+.player.has-video .placeholder{display:none}
+.big-play{
+  position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);
+  width:88px;height:88px;border-radius:50%;border:none;cursor:pointer;
+  background:var(--blush);box-shadow:0 0 0 10px rgba(242,198,208,.4);
+  display:flex;align-items:center;justify-content:center;transition:transform .2s;z-index:2;
+}
+.big-play:hover{transform:translate(-50%,-50%) scale(1.07)}
+.ogre{font-size:46px;line-height:1;filter:hue-rotate(-25deg) saturate(.55) brightness(1.45)}
+.big-play{background:#fff}
+.confetto{position:fixed;top:-60px;z-index:999;pointer-events:none;animation:fall linear forwards}
+@keyframes fall{to{transform:translateY(115vh) rotate(var(--r))}}
+.player.playing .big-play{opacity:0;pointer-events:none}
+
+.controls{
+  position:absolute;left:0;right:0;bottom:0;z-index:3;
+  display:flex;align-items:center;gap:12px;padding:14px 16px;
+  background:linear-gradient(transparent,rgba(42,18,25,.75));
+}
+.ctrl{
+  border:none;cursor:pointer;background:var(--blush);color:var(--ink);
+  width:38px;height:38px;border-radius:50%;display:flex;align-items:center;justify-content:center;flex-shrink:0;
+}
+.ctrl:hover{background:#fff}
+.ctrl:focus-visible,.speed button:focus-visible,.big-play:focus-visible{outline:3px solid #fff;outline-offset:2px}
+.time{color:#fff;font-size:12px;font-weight:600;min-width:84px;font-variant-numeric:tabular-nums}
+.bar{flex:1;height:8px;border-radius:100px;background:rgba(255,255,255,.3);cursor:pointer;position:relative}
+.bar-fill{height:100%;width:0;border-radius:100px;background:var(--blush);position:relative}
+.bar-fill::after{content:"";position:absolute;right:-7px;top:50%;transform:translateY(-50%);width:14px;height:14px;border-radius:50%;background:#fff;border:3px solid var(--rose)}
+.speed{display:flex;gap:4px;background:rgba(255,255,255,.15);padding:3px;border-radius:100px}
+.speed button{
+  border:none;cursor:pointer;background:transparent;color:#fff;font-family:inherit;
+  font-size:12px;font-weight:700;padding:6px 10px;border-radius:100px;
+}
+.speed button.active{background:var(--blush);color:var(--ink)}
+
+.vol{display:flex;align-items:center;gap:6px}
+#volume{-webkit-appearance:none;appearance:none;width:80px;height:6px;border-radius:100px;cursor:pointer;
+  background:linear-gradient(to right,var(--blush) var(--v,100%),rgba(255,255,255,.3) var(--v,100%))}
+#volume::-webkit-slider-thumb{-webkit-appearance:none;width:14px;height:14px;border-radius:50%;background:#fff;border:3px solid var(--rose)}
+#volume::-moz-range-thumb{width:10px;height:10px;border-radius:50%;background:#fff;border:3px solid var(--rose)}
+#volume:focus-visible{outline:3px solid #fff;outline-offset:3px}
+/* season cards */
+.cards{margin:70px auto 0;max-width:760px;display:flex;flex-direction:column;gap:16px;text-align:left}
+.card summary{list-style:none;cursor:pointer;position:relative;padding-right:56px}
+.card summary::-webkit-details-marker{display:none}
+.card summary:focus-visible{outline:3px solid var(--dot);outline-offset:6px;border-radius:16px}
+.chev{position:absolute;right:0;bottom:2px;width:40px;height:40px;border-radius:50%;background:#fff}
+.chev::before,.chev::after{content:"";position:absolute;top:50%;left:50%;width:14px;height:2.5px;border-radius:2px;background:var(--hl);transform:translate(-50%,-50%);transition:transform .25s}
+.chev::after{transform:translate(-50%,-50%) rotate(90deg)}
+.card[open] .chev::after{transform:translate(-50%,-50%) rotate(0)}
+.card h3{margin-bottom:0!important}
+.card .body{padding-top:16px;animation:op .3s ease}
+@keyframes op{from{opacity:0;transform:translateY(-6px)}to{opacity:1;transform:none}}
+.card{border-radius:28px;padding:34px 28px 38px;position:relative;overflow:hidden}
+.card.bloom{background:#F3E1E5;--dot:#A86A78;--hl:#8A3A52;--num:rgba(168,106,120,.12)}
+.card.integ{background:#E1E9F3;--dot:#6E86B5;--hl:#4A6396;--num:rgba(110,134,181,.14)}
+.card.sprint{background:#E3ECE1;--dot:#7A9C7C;--hl:#4F7351;--num:rgba(122,156,124,.16)}
+.big-num{position:absolute;top:6px;right:-6px;font-size:130px;font-weight:800;line-height:1;color:var(--num);letter-spacing:-.04em;pointer-events:none}
+.pill{
+  position:relative;display:inline-flex;align-items:center;gap:10px;
+  padding:0;font-size:11px;font-weight:700;letter-spacing:.2em;text-transform:uppercase;color:var(--ink);
+}
+.pill i{width:9px;height:9px;border-radius:50%;background:var(--dot)}
+.card h3{position:relative;font-size:24px;font-weight:800;line-height:1.15;margin:26px 0 16px;letter-spacing:-.01em;color:#1a0a0a}
+.card p{position:relative;font-size:15px;line-height:1.65;color:#7a5a5a;margin-bottom:14px}
+.card p.hl{color:var(--hl);font-weight:700}
+@media (max-width:600px){.card{padding:24px 20px 26px;border-radius:22px}.card h3{font-size:20px;margin-top:20px}.big-num{font-size:90px}.pill{font-size:10px;letter-spacing:.16em}.chev{width:34px;height:34px}.card summary{padding-right:46px}.card p{font-size:15px}}
+
+footer{margin-top:80px;font-size:11px;font-weight:600;letter-spacing:.1em;text-transform:uppercase;color:#b07c8a}
+
+@media (max-width:760px){
+    .time{display:none}
+  .big-play{width:68px;height:68px}
+  .controls{gap:8px;padding:10px}
+  .speed button{padding:5px 7px}
+  #volume{display:none}
+}
+</style>
+</head>
+<body>
+<main class="wrap">
+  <span class="eyebrow">A gift for you</span>
+  <h1>Seen in <em>Seasons</em> Workshop</h1>
+  <p class="for">for <strong>Steph</strong> <span class="oni">👹</span></p>
+
+  <p class="starts">The workshop starts at <button id="skip">2:03</button>, tap to jump there</p>
+
+  <div class="frame">
+    <div class="player" id="player">
+      <iframe id="vimeo" src="https://player.vimeo.com/video/1247562919?autopause=0&amp;player_id=0&amp;app_id=58479&amp;controls=0&amp;title=0&amp;byline=0&amp;portrait=0&amp;playsinline=1" frameborder="0" allow="autoplay; fullscreen; picture-in-picture; clipboard-write; encrypted-media; web-share" referrerpolicy="strict-origin-when-cross-origin" title="Seen in Seasons Final"></iframe>
+      <div class="click-layer" id="clickLayer"></div>
+      <button class="big-play" id="bigPlay" aria-label="Play video">
+        <span class="ogre">👹</span>
+      </button>
+      <div class="controls">
+        <button class="ctrl" id="playBtn" aria-label="Play">
+          <svg id="playIcon" width="18" height="18" viewBox="0 0 24 24" fill="#3D1A24"><path d="M8 5v14l11-7z"/></svg>
+        </button>
+        <span class="time" id="time">0:00 / 0:00</span>
+        <div class="bar" id="bar" role="slider" aria-label="Seek" tabindex="0"><div class="bar-fill" id="fill"></div></div>
+        <div class="vol">
+          <button class="ctrl" id="muteBtn" aria-label="Mute">
+            <svg id="volIcon" width="18" height="18" viewBox="0 0 24 24" fill="#3D1A24"><path d="M4 9v6h4l5 4V5L8 9z"/><path d="M16 8.5a5 5 0 0 1 0 7M18.5 6a8.5 8.5 0 0 1 0 12" stroke="#3D1A24" stroke-width="2" fill="none" stroke-linecap="round"/></svg>
+          </button>
+          <input type="range" id="volume" min="0" max="1" step="0.05" value="1" aria-label="Volume">
+        </div>
+        <div class="speed" id="speed">
+          <button class="active" data-rate="1">1x</button>
+          <button data-rate="1.5">1.5x</button>
+          <button data-rate="2">2x</button>
+        </div>
+        <button class="ctrl" id="fsBtn" aria-label="Expand to full screen">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#3D1A24" stroke-width="2.4" stroke-linecap="round"><path d="M4 9V4h5M20 9V4h-5M4 15v5h5M20 15v5h-5"/></svg>
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <section class="cards">
+    <details class="card bloom">
+      <summary>
+      <span class="big-num">01</span>
+      <span class="pill"><i></i>01 // Bloom Season</span>
+      <h3>Test, explore &amp; plant seeds</h3>
+        <span class="chev" aria-hidden="true"></span>
+      </summary>
+      <div class="body">
+        <p>You’re ready for something new. Preferably without spending three months building an offer people politely “love” but never buy.</p>
+        <p class="hl">Bloom is where you test ideas, watch the response and find the offer, message or opportunity worth taking further.</p>
+        <p>Small tests. Useful feedback. Give the idea some evidence before giving it your entire quarter.</p>
+      </div>
+    </details>
+    <details class="card integ">
+      <summary>
+      <span class="big-num">02</span>
+      <span class="pill"><i></i>02 // Integration Season</span>
+      <h3>Stabilise, systemise &amp; rest</h3>
+        <span class="chev" aria-hidden="true"></span>
+      </summary>
+      <div class="body">
+        <p>Sales are happening. Things are moving. But apparently, so are you. Constantly.</p>
+        <p class="hl">Integration is where you strengthen what’s working, document the repeatable tasks and build the systems that make your business easier to run.</p>
+        <p>Make room to rest, reduce how much depends on you and prepare for growth without carrying every task into it.</p>
+      </div>
+    </details>
+    <details class="card sprint">
+      <summary>
+      <span class="big-num">03</span>
+      <span class="pill"><i></i>03 // Sprint Season</span>
+      <h3>Lock in, execute &amp; maximise</h3>
+        <span class="chev" aria-hidden="true"></span>
+      </summary>
+      <div class="body">
+        <p>The offer has sold. The message is landing. You have something worth backing.</p>
+        <p class="hl">Sprint is where you focus your time and effort on making the most of it.</p>
+        <p>Increase visibility. Make clear offers. Follow up. Review the numbers and adjust as you go.</p>
+        <p>The random project can wait. Give what’s working your full attention before getting distracted by your next brilliant idea.</p>
+      </div>
+    </details>
+  </section>
+
+  <footer>&copy; <span id="yr"></span> Jessica Marie Holdings Pty Ltd</footer>
+</main>
+
+<script src="https://player.vimeo.com/api/player.js"></script>
+<script>
+const v=new Vimeo.Player(document.getElementById('vimeo')),p=document.getElementById('player'),
+      playBtn=document.getElementById('playBtn'),big=document.getElementById('bigPlay'),
+      icon=document.getElementById('playIcon'),bar=document.getElementById('bar'),
+      fill=document.getElementById('fill'),time=document.getElementById('time');
+document.getElementById('yr').textContent=new Date().getFullYear();
+window.addEventListener('load',()=>{
+  for(let i=0;i<70;i++){
+    const c=document.createElement('span');c.className='confetto';c.textContent='👹';
+    const d=2.5+Math.random()*2.5;
+    c.style.cssText=`left:${Math.random()*100}vw;font-size:${18+Math.random()*26}px;animation-duration:${d}s;animation-delay:${Math.random()*1.2}s;--r:${(Math.random()*720-360)|0}deg`;
+    document.body.appendChild(c);setTimeout(()=>c.remove(),(d+1.5)*1000);
+  }
+});
+const PLAY='<path d="M8 5v14l11-7z"/>',PAUSE='<path d="M6 5h4v14H6zM14 5h4v14h-4z"/>';
+const fmt=s=>{s=Math.floor(s||0);return Math.floor(s/60)+':'+String(s%60).padStart(2,'0')};
+let dur=0,cur=0,paused=true,lastVol=1;
+function toggle(){paused?v.play():v.pause()}
+playBtn.onclick=toggle;big.onclick=toggle;document.getElementById('clickLayer').onclick=toggle;
+v.on('play',()=>{paused=false;p.classList.add('playing');icon.innerHTML=PAUSE;playBtn.setAttribute('aria-label','Pause')});
+v.on('pause',()=>{paused=true;p.classList.remove('playing');icon.innerHTML=PLAY;playBtn.setAttribute('aria-label','Play')});
+v.on('ended',()=>{paused=true;p.classList.remove('playing');icon.innerHTML=PLAY});
+function draw(){fill.style.width=(dur?cur/dur*100:0)+'%';time.textContent=fmt(cur)+' / '+fmt(dur)}
+v.getDuration().then(d=>{dur=d;draw()});
+v.on('timeupdate',d=>{cur=d.seconds;dur=d.duration;draw()});
+const seek=t=>{cur=Math.max(0,Math.min(dur,t));v.setCurrentTime(cur);draw()};
+bar.onclick=e=>{const r=bar.getBoundingClientRect();if(dur)seek((e.clientX-r.left)/r.width*dur)};
+bar.onkeydown=e=>{if(e.key==='ArrowRight')seek(cur+5);if(e.key==='ArrowLeft')seek(cur-5)};
+const vol=document.getElementById('volume'),muteBtn=document.getElementById('muteBtn'),volIcon=document.getElementById('volIcon');
+const ON=volIcon.innerHTML,OFF='<path d="M4 9v6h4l5 4V5L8 9z"/><path d="M16 9l5 6M21 9l-5 6" stroke="#3D1A24" stroke-width="2" stroke-linecap="round"/>';
+function setVol(x){v.setVolume(x);vol.value=x;vol.style.setProperty('--v',x*100+'%');volIcon.innerHTML=x==0?OFF:ON;muteBtn.setAttribute('aria-label',x==0?'Unmute':'Mute')}
+vol.oninput=()=>{if(+vol.value>0)lastVol=+vol.value;setVol(+vol.value)};
+muteBtn.onclick=()=>setVol(+vol.value===0?lastVol:0);
+document.getElementById('skip').onclick=()=>{v.setCurrentTime(123).then(()=>v.play());cur=123;draw()};
+document.querySelectorAll('#speed button').forEach(b=>b.onclick=()=>{
+  v.setPlaybackRate(+b.dataset.rate).catch(()=>{});
+  document.querySelectorAll('#speed button').forEach(x=>x.classList.toggle('active',x===b));
+});
+document.getElementById('fsBtn').onclick=()=>{
+  if(document.fullscreenElement)document.exitFullscreen();
+  else if(p.requestFullscreen)p.requestFullscreen();
+  else v.requestFullscreen();
+};
+</script>
+</body>
+</html>
